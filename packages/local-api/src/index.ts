@@ -1,5 +1,20 @@
+import express from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
+
 export const serve = (port: number, filename: string, dir: string) => {
-  console.log(`Serving Traffic on PORT ${port}`);
-  console.log("Saving/Fetching cells from", filename);
-  console.log("That file is in directory", dir);
+  const app = express();
+
+  app.use(express.static("../../local-client/build"));
+
+  // app.use(
+  //   createProxyMiddleware({
+  //     target: "http://localhost:3000",
+  //     ws: true,
+  //     logLevel: "silent",
+  //   })
+  // );
+
+  return new Promise<void>((res, rej) => {
+    app.listen(port, res).on("error", rej);
+  });
 };
